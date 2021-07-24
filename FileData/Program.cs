@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using ThirdPartyTools;
+using System.Configuration;
+using FileData.core;
 
 namespace FileData
 {
@@ -12,16 +14,19 @@ namespace FileData
             string outputVersion="";
             int outputSize = 0;
             string firstArgs=args[0].ToString();
-            FileDetails filesystem = new FileDetails();
+            FetchFileDetails fetchdetails = new FetchFileDetails();
 
-            if (firstArgs == "-v" || firstArgs == "--v" || firstArgs == "/v" || firstArgs == "--version")
+            string[] version = ConfigurationManager.AppSettings["vsupportedVersion"].Split(',');
+            string[] size = ConfigurationManager.AppSettings["vsupportedSize"].Split(',');
+
+            if (version.Contains(firstArgs))
             {
-                outputVersion = filesystem.Version(args[1].ToString());
+                outputVersion = fetchdetails.Version(args[1].ToString());
                 Console.WriteLine(outputVersion);
             }
-            else if (firstArgs == "-s" || firstArgs == "--s" || firstArgs == "/s" || firstArgs == "--size")
+            else if (size.Contains(firstArgs))
             {
-                outputSize = filesystem.Size(args[1].ToString());
+                outputSize = fetchdetails.Size(args[1].ToString());
                 Console.WriteLine(outputSize);
             }
             else
@@ -31,5 +36,7 @@ namespace FileData
           
            
         }
+
+        
     }
 }
